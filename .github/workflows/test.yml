@@ -23,7 +23,7 @@ jobs:
         run: |
           df -h
           mkdir rising && cd rising
-          curl https://storage.googleapis.com/git-repo-downloads/repo repo
+          curl https://storage.googleapis.com/git-repo-downloads/repo > repo
           sudo chmod 777 repo && sudo mv repo /usr/bin
           repo init -u https://github.com/RisingTechOSS/android -b fourteen --git-lfs
           repo sync -c --no-clone-bundle --optimized-fetch --prune --force-sync -j$(nproc --all)
