@@ -1,0 +1,38 @@
+name: Test
+
+on:
+  workflow_dispatch:
+
+permissions:
+  actions: write
+  contents: write
+  statuses: write
+
+run-name: "Test"
+
+jobs:
+  check-limit:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Repo init
+        env:
+          GH_TOKEN: ${{ secrets.TOKEN }}
+        run: |
+          df -h
+          mkdir rising && cd rising
+          repo init -u https://github.com/RisingTechOSS/android -b fourteen --git-lfs
+          repo sync -c --no-clone-bundle --optimized-fetch --prune --force-sync -j$(nproc --all)
+
+      - name: Delete .repo
+        run: |
+          df -h
+          rm -rf rising/.repo
+
+      - name: Upload Repo
+        uses: actions/upload-artifact@v4
+        with:
+          name: rising.zip
+          path: rising
